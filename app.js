@@ -224,9 +224,9 @@ io.on('connection', (socket) => {
             if (name.name === clientData.chatName) {
                 io.to(socket.id).emit('nameexists', {})
                 exists = true;
+                socket.disconnect()
             }
         })
-        names.push({name: clientData.chatName, room: clientData.roomName})
         rooms.forEach(room => {
             if (room.room === clientData.roomName) {
                 roomExists = true;
@@ -238,6 +238,7 @@ io.on('connection', (socket) => {
                 roomString += clientData.roomName + ", "
         }
         if (!exists) {
+            names.push({name: clientData.chatName, room: clientData.roomName})
             socket.join(clientData.roomName)
             if (!nameString.includes(clientData.chatName))
                 nameString += clientData.chatName + ", "
@@ -255,11 +256,6 @@ io.on('connection', (socket) => {
                 currentRooms: rooms,
                 currentUsers: names
             })
-        }
-        else
-        {
-            socket.disconnect()
-            window.location.reload()
         }
         socket.on('createMessage', (messageData) => {
             io.to(clientData.roomName).emit('messageSent', {

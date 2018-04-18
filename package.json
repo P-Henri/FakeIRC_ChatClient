@@ -15,6 +15,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "socket.io": "^2.0.4",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "dotenv": "^5.0.0"
   }
 }

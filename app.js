@@ -11,6 +11,15 @@ const io = require('socket.io')(server, {wsEngine: 'ws'})
 const uuidv4 = require('uuid/v4')
 
 app.use(express.static('public'))
+app.enable('trust proxy');
+app.use(function (req, res, next) {
+    if (req.secure) {
+        next();
+    }
+    else {
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+}
 
 let colors = [
     "#ef9a9a",
@@ -285,8 +294,7 @@ io.on('connection', (socket) => {
                     currentUsers: names
                 })
             })
-            if(io.sockets.adapter.rooms[leavingData.roomName] === undefined)
-            {
+            if (io.sockets.adapter.rooms[leavingData.roomName] === undefined) {
                 let index = rooms.indexOf(leavingData.roomName)
                 rooms.splice(index, 1)
                 io.emit('currentRoomsAndUsers', {

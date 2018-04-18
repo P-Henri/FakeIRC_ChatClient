@@ -256,6 +256,11 @@ io.on('connection', (socket) => {
                 currentUsers: names
             })
         }
+        else
+        {
+            socket.disconnect()
+            window.location.reload()
+        }
         socket.on('createMessage', (messageData) => {
             io.to(clientData.roomName).emit('messageSent', {
                 from: messageData.from,

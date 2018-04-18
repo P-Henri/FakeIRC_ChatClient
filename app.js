@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 app.use(express.static('public'))
 
 const server = http.createServer(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {wsEngine: 'ws'})
 
 let colors = [
     "#ef9a9a",
@@ -257,8 +257,6 @@ io.on('connection', (socket) => {
                 currentUsers: names
             })
         }
-        exists = false
-        roomExists = false
         socket.on('createMessage', (messageData) => {
             io.to(clientData.roomName).emit('messageSent', {
                 from: messageData.from,
@@ -342,6 +340,8 @@ io.on('connection', (socket) => {
             })
             nameString = nameString.replace(`${clientData.chatName}, `, "")
         })
+        exists = false
+        roomExists = false
     })
 })
 

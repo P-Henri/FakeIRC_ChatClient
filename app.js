@@ -5,9 +5,9 @@ const express = require('express')
 const moment = require('moment')
 const http = require('http')
 const port = process.env.PORT || 5150
-let app = express()
-let server = http.createServer(app)
-let io = require('socket.io').listen(server)
+require('dotenv').config()
+
+const app = express()
 //const io = require('socket.io')(server, {wsEngine: 'ws'})
 //const socketIO = require('socket.io')
 
@@ -32,14 +32,8 @@ app.use(function (req, res, next) {
 });
 app.use(express.static('public'))
 
-// home page
-app.get('/', function (req, res) {
-    res.sendFile('index.html', {root: __dirname + './public'})
-})
-
-server.listen(port, () => {
-    console.log(`starting on port ${port}`)
-})
+const server = http.createServer(app)
+const io = require('socket.io')(server)
 
 let colors = [
     "#ef9a9a",
@@ -349,4 +343,13 @@ io.on('connection', (socket) => {
             nameString = nameString.replace(`${clientData.chatName}, `, "")
         })
     })
+})
+
+// home page
+app.get('/', function (req, res) {
+    res.sendFile('index.html', {root: __dirname + '/public'})
+})
+
+server.listen(port, () => {
+    console.log(`starting on port ${port}`)
 })

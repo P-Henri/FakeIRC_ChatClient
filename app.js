@@ -243,11 +243,11 @@ io.on('connection', (socket) => {
             if (!nameString.includes(clientData.chatName))
                 nameString += clientData.chatName + ", "
             io.to(socket.id).emit('welcome', {
-                from: 'Admin', room: clientData.roomName, text: `Welcome, ${clientData.chatName}!`,
+                from: 'Admin', room: clientData.roomName, text: `Welcome, ${clientData.chatName.toLowerCase()}!`,
                 id: socket.id, color: '#000', createdAt: moment().format('hh:mm:ss a')
             })
             socket.broadcast.to(clientData.roomName).emit('joined', {
-                from: 'Admin', room: clientData.roomName, text: `${clientData.chatName} has joined.`,
+                from: 'Admin', room: clientData.roomName, text: `${clientData.chatName.toLowerCase()} has joined.`,
                 color: '#000', createdAt: moment().format('hh:mm:ss a')
             }) // send message to existing users in room
             io.emit('currentRoomsAndUsers', {
@@ -329,7 +329,7 @@ io.on('connection', (socket) => {
             io.to(clientData.roomName).emit('messageSent', {
                 from: 'Admin',
                 room: clientData.roomName,
-                text: `${clientData.chatName} has disconnected`,
+                text: `${clientData.chatName.toLowerCase()} has disconnected`,
                 id: socket.id,
                 color: '#000',
                 createdAt: moment().format('hh:mm:ss a')

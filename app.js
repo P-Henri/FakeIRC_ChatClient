@@ -277,7 +277,7 @@ io.on('connection', (socket) => {
         })
         socket.on('isLeaving', (leavingData) => {
             for (let i = 0; i < names.length; i++) {
-                if (names[i].name === leavingData.chatName) {
+                if (names[i].name.toLowerCase() === leavingData.chatName.toLowerCase()) {
                     names.splice(i, 1)
                     break;
                 }
@@ -312,7 +312,7 @@ io.on('connection', (socket) => {
         })
         socket.on('disconnect', () => {
             for (let i = 0; i < names.length; i++) {
-                if (names[i].name === clientData.chatName) {
+                if (names[i].name.toLowerCase() === clientData.chatName.toLowerCase()) {
                     names.splice(i, 1)
                 }
             }

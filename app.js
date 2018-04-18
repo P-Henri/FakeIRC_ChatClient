@@ -221,7 +221,7 @@ io.on('connection', (socket) => {
         let userColor = colors[Math.floor(Math.random() * 168) + 1]
         console.log(`data from new client --> name: ${clientData.chatName} room: ${clientData.roomName}`)
         names.forEach(name => {
-            if (name.name === clientData.chatName) {
+            if (name.name.toLowerCase() === clientData.chatName.toLowerCase()) {
                 io.to(socket.id).emit('nameexists', {})
                 exists = true;
                 socket.disconnect()
@@ -233,12 +233,12 @@ io.on('connection', (socket) => {
             }
         })
         if (!roomExists) {
-            rooms.push({key: uuidv4(), room: clientData.roomName})
+            rooms.push({key: uuidv4(), room: clientData.roomName.toLowerCase()})
             if (!roomString.includes(clientData.roomName))
                 roomString += clientData.roomName + ", "
         }
         if (!exists) {
-            names.push({name: clientData.chatName, room: clientData.roomName})
+            names.push({name: clientData.chatName.toLowerCase(), room: clientData.roomName})
             socket.join(clientData.roomName)
             if (!nameString.includes(clientData.chatName))
                 nameString += clientData.chatName + ", "
@@ -259,7 +259,7 @@ io.on('connection', (socket) => {
         }
         socket.on('createMessage', (messageData) => {
             io.to(clientData.roomName).emit('messageSent', {
-                from: messageData.from,
+                from: messageData.from.toLowerCase(),
                 room: clientData.room,
                 text: messageData.text,
                 id: socket.id,

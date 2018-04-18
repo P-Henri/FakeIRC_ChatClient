@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
     else {
         res.redirect('https://' + req.headers.host + req.url);
     }
-}
+})
 
 let colors = [
     "#ef9a9a",

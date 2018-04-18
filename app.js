@@ -325,7 +325,7 @@ io.on('connection', (socket) => {
 
 // home page
 app.get('/', function (req, res) {
-    res.sendFile('index.html', {root: __dirname + '/public'})
+    res.sendFile('index.html', {root: __dirname + './public'})
 })
 
 server.listen(port, () => {

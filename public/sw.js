@@ -1,5 +1,5 @@
 'use strict';
-const offlineUrl = 'offline.html';
+const offlineUrl = './offline.html';
 this.addEventListener('install', event => {
     event.waitUntil(
         caches.open('offline-cache').then(function(cache) {

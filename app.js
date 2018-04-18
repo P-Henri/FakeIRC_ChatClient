@@ -283,14 +283,6 @@ io.on('connection', (socket) => {
                 }
             }
             nameString = nameString.replace(`${leavingData.chatName}, `, "")
-            io.to(leavingData.roomName).emit('messageSent', {
-                from: 'Admin',
-                room: leavingData.roomName,
-                text: `${leavingData.chatName} has disconnected`,
-                id: socket.id,
-                color: '#000',
-                createdAt: moment().format('hh:mm:ss a')
-            })
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
                 users: nameString,
@@ -334,12 +326,6 @@ io.on('connection', (socket) => {
                     currentUsers: names
                 })
             }
-            io.emit('currentRoomsAndUsers', {
-                rooms: roomString,
-                users: nameString,
-                currentRooms: rooms,
-                currentUsers: names
-            })
             io.to(clientData.roomName).emit('messageSent', {
                 from: 'Admin',
                 room: clientData.roomName,
@@ -347,6 +333,12 @@ io.on('connection', (socket) => {
                 id: socket.id,
                 color: '#000',
                 createdAt: moment().format('hh:mm:ss a')
+            })
+            io.emit('currentRoomsAndUsers', {
+                rooms: roomString,
+                users: nameString,
+                currentRooms: rooms,
+                currentUsers: names
             })
             nameString = nameString.replace(`${clientData.chatName}, `, "")
         })

@@ -7,7 +7,9 @@ const port = process.env.PORT || 5150
 require('dotenv').config()
 let app = express()
 let server = http.createServer(app)
-const io = require('socket.io')(server, {wsEngine: 'ws'})
+//const io = require('socket.io')(server, {wsEngine: 'ws'})
+const socketIO = require('socket.io')
+let io = socketIO(server)
 const uuidv4 = require('uuid/v4')
 
 

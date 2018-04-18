@@ -224,7 +224,6 @@ io.on('connection', (socket) => {
             if (name.name === clientData.chatName) {
                 io.to(socket.id).emit('nameexists', {})
                 exists = true;
-                socket.disconnect()
             }
         })
         names.push({name: clientData.chatName, room: clientData.roomName})

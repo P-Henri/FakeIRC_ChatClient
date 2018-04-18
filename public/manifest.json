@@ -1,0 +1,17 @@
+{
+  "short_name": "FakeIRC",
+  "name": "FakeIRC - Yea we aren't an IRC",
+  "description": "Simple chat app pretending to be an IRC client. haHAA",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait"
+}

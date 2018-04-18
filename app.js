@@ -324,6 +324,16 @@ io.on('connection', (socket) => {
                     names.splice(i, 1)
                 }
             }
+            if (io.sockets.adapter.rooms[clientData.roomName] === undefined) {
+                let index = rooms.indexOf(clientData.roomName)
+                rooms.splice(index, 1)
+                io.emit('currentRoomsAndUsers', {
+                    rooms: roomString,
+                    users: nameString,
+                    currentRooms: rooms,
+                    currentUsers: names
+                })
+            }
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
                 users: nameString,

@@ -1,13 +1,13 @@
 // library modules
-require('dotenv').config()
-const uuidv4 = require('uuid/v4')
-const express = require('express')
-const moment = require('moment')
-const http = require('http')
-const port = process.env.PORT || 5150
-require('dotenv').config()
+require('dotenv').config();
+const uuidv4 = require('uuid/v4');
+const express = require('express');
+const moment = require('moment');
+const http = require('http');
+const port = process.env.PORT || 5150;
+require('dotenv').config();
 
-const app = express()
+const app = express();
 //const io = require('socket.io')(server, {wsEngine: 'ws'})
 //const socketIO = require('socket.io')
 
@@ -30,10 +30,10 @@ app.use(function (req, res, next) {
         res.redirect('https://' + req.headers.host + req.url);
     }
 });
-app.use(express.static('public'))
+app.use(express.static('public'));
 
-const server = http.createServer(app)
-const io = require('socket.io')(server, {wsEngine: 'ws'})
+const server = http.createServer(app);
+const io = require('socket.io')(server, {wsEngine: 'ws'});
 
 let colors = [
     "#ef9a9a",
@@ -205,13 +205,13 @@ let colors = [
     "#455a64",
     "#37474f",
     "#263238"
-]
-let rooms = []
-let names = []
-let roomString = ''
-let nameString = ''
-let exists = false
-let roomExists = false
+];
+let rooms = [];
+let names = [];
+let roomString = '';
+let nameString = '';
+let exists = false;
+let roomExists = false;
 
 // client connection here
 io.on('connection', (socket) => {
@@ -226,30 +226,30 @@ io.on('connection', (socket) => {
                 exists = true;
                 socket.disconnect()
             }
-        })
+        });
         rooms.forEach(room => {
             if (room.room === clientData.roomName) {
                 roomExists = true;
             }
-        })
+        });
         if (!roomExists) {
-            rooms.push({key: uuidv4(), room: clientData.roomName.toLowerCase()})
+            rooms.push({key: uuidv4(), room: clientData.roomName.toLowerCase()});
             if (!roomString.includes(clientData.roomName))
                 roomString += clientData.roomName + ", "
         }
         if (!exists) {
-            names.push({name: clientData.chatName.toLowerCase(), room: clientData.roomName})
-            socket.join(clientData.roomName)
+            names.push({name: clientData.chatName.toLowerCase(), room: clientData.roomName});
+            socket.join(clientData.roomName);
             if (!nameString.includes(clientData.chatName))
-                nameString += clientData.chatName + ", "
+                nameString += clientData.chatName + ", ";
             io.to(socket.id).emit('welcome', {
                 from: 'Admin', room: clientData.roomName, text: `Welcome, ${clientData.chatName.toLowerCase()}!`,
                 id: socket.id, color: '#000', createdAt: moment().format('hh:mm:ss a')
-            })
+            });
             socket.broadcast.to(clientData.roomName).emit('joined', {
                 from: 'Admin', room: clientData.roomName, text: `${clientData.chatName.toLowerCase()} has joined.`,
                 color: '#000', createdAt: moment().format('hh:mm:ss a')
-            }) // send message to existing users in room
+            }); // send message to existing users in room
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
                 users: nameString,
@@ -266,7 +266,7 @@ io.on('connection', (socket) => {
                 color: userColor,
                 createdAt: moment().format('hh:mm:ss a')
             })
-        })
+        });
         socket.on('typing', (typingData) => {
             socket.broadcast.to(clientData.roomName).emit('messageTyping', {
                     name: typingData.userName,
@@ -274,7 +274,7 @@ io.on('connection', (socket) => {
                     id: socket.id
                 }
             )
-        })
+        });
         socket.on('isLeaving', (leavingData) => {
             for (let i = 0; i < names.length; i++) {
                 if (names[i].name.toLowerCase() === leavingData.chatName.toLowerCase()) {
@@ -288,7 +288,7 @@ io.on('connection', (socket) => {
                 users: nameString,
                 currentRooms: rooms,
                 currentUsers: names
-            })
+            });
             socket.leave(leavingData.roomName, function (err) {
                 console.log(err)
                 io.emit('currentRoomsAndUsers', {
@@ -297,7 +297,7 @@ io.on('connection', (socket) => {
                     currentRooms: rooms,
                     currentUsers: names
                 })
-            })
+            });
             if (io.sockets.adapter.rooms[leavingData.roomName] === undefined) {
                 let index = rooms.indexOf(leavingData.roomName)
                 rooms.splice(index, 1)
@@ -309,7 +309,7 @@ io.on('connection', (socket) => {
                 })
             }
             socket.disconnect()
-        })
+        });
         socket.on('disconnect', () => {
             for (let i = 0; i < names.length; i++) {
                 if (names[i].name.toLowerCase() === clientData.chatName.toLowerCase()) {
@@ -333,25 +333,25 @@ io.on('connection', (socket) => {
                 id: socket.id,
                 color: '#000',
                 createdAt: moment().format('hh:mm:ss a')
-            })
+            });
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
                 users: nameString,
                 currentRooms: rooms,
                 currentUsers: names
-            })
+            });
             nameString = nameString.replace(`${clientData.chatName}, `, "")
-        })
-        exists = false
-        roomExists = false
+        });
+        exists = false;
+        roomExists = false;
     })
-})
+});
 
 // home page
 app.get('/', function (req, res) {
     res.sendFile('index.html', {root: __dirname + '/public'})
-})
+});
 
 server.listen(port, () => {
     console.log(`starting on port ${port}`)
-})
+});

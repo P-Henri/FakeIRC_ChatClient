@@ -215,14 +215,14 @@ let roomExists = false;
 
 // client connection here
 io.on('connection', (socket) => {
-    io.emit('currentRoomsAndUsers', {rooms: roomString, users: nameString, currentRooms: rooms, currentUsers: names})
+    io.emit('currentRoomsAndUsers', {rooms: roomString, users: nameString, currentRooms: rooms, currentUsers: names});
     // client sent server 'join' message using room to join
     socket.on('join', (clientData) => {
-        let userColor = colors[Math.floor(Math.random() * 168) + 1]
-        console.log(`data from new client --> name: ${clientData.chatName} room: ${clientData.roomName}`)
+        let userColor = colors[Math.floor(Math.random() * 168) + 1];
+        console.log(`data from new client --> name: ${clientData.chatName} room: ${clientData.roomName}`);
         names.forEach(name => {
             if (name.name.toLowerCase() === clientData.chatName.toLowerCase()) {
-                io.to(socket.id).emit('nameexists', {})
+                io.to(socket.id).emit('nameexists', {});
                 exists = true;
                 socket.disconnect()
             }
@@ -278,11 +278,11 @@ io.on('connection', (socket) => {
         socket.on('isLeaving', (leavingData) => {
             for (let i = 0; i < names.length; i++) {
                 if (names[i].name.toLowerCase() === leavingData.chatName.toLowerCase()) {
-                    names.splice(i, 1)
+                    names.splice(i, 1);
                     break;
                 }
             }
-            nameString = nameString.replace(`${leavingData.chatName}, `, "")
+            nameString = nameString.replace(`${leavingData.chatName}, `, "");
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
                 users: nameString,
@@ -290,7 +290,7 @@ io.on('connection', (socket) => {
                 currentUsers: names
             });
             socket.leave(leavingData.roomName, function (err) {
-                console.log(err)
+                console.log(err);
                 io.emit('currentRoomsAndUsers', {
                     rooms: roomString,
                     users: nameString,
@@ -299,8 +299,8 @@ io.on('connection', (socket) => {
                 })
             });
             if (io.sockets.adapter.rooms[leavingData.roomName] === undefined) {
-                let index = rooms.indexOf(leavingData.roomName)
-                rooms.splice(index, 1)
+                let index = rooms.indexOf(leavingData.roomName);
+                rooms.splice(index, 1);
                 io.emit('currentRoomsAndUsers', {
                     rooms: roomString,
                     users: nameString,
@@ -317,8 +317,8 @@ io.on('connection', (socket) => {
                 }
             }
             if (io.sockets.adapter.rooms[clientData.roomName] === undefined) {
-                let index = rooms.indexOf(clientData.roomName)
-                rooms.splice(index, 1)
+                let index = rooms.indexOf(clientData.roomName);
+                rooms.splice(index, 1);
                 io.emit('currentRoomsAndUsers', {
                     rooms: roomString,
                     users: nameString,

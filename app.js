@@ -212,6 +212,7 @@ let roomString = '';
 let nameString = '';
 let exists = false;
 let roomExists = false;
+let userFound = false;
 
 // client connection here
 io.on('connection', (socket) => {
@@ -268,17 +269,32 @@ io.on('connection', (socket) => {
             })
         });
         socket.on('typing', (typingData) => {
-            let index = hasTyped.indexOf(`${typingData.userName}`);
-            console.log(`index: ${index}`);
-            if(index === -1) {
-                hasTyped.push(`${typingData.userName}`);
-            }
-            socket.broadcast.to(clientData.roomName).emit('messageTyping', {
-                name: typingData.userName,
-                msg: typingData.message,
-                typingUsers: hasTyped,
-                id: socket.id
+            hasTyped.forEach(user => {
+                if(user === typingData.userName) {
+                    userFound = true;
+                }
             });
+            if(userFound === false) {
+                hasTyped.push(typingData.userName);
+                console.log(hasTyped);
+            }
+            if(typingData.message.length > 0) {
+                if (typingData.length > 2) {
+                    socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
+                }
+                else {
+                    socket.broadcast.to(clientData.roomName).emit('userTyping', {
+                        name: typingData.userName,
+                        msg: typingData.message,
+                        id: socket.id
+                    });
+                }
+            }
+            else {
+                let index = rooms.indexOf(clientData.roomName);
+                rooms.splice(index, 1);
+            }
+            userFound = false;
         });
         socket.on('isLeaving', (leavingData) => {
             for (let i = 0; i < names.length; i++) {

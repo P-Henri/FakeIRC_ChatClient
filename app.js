@@ -268,9 +268,10 @@ io.on('connection', (socket) => {
             })
         });
         socket.on('typing', (typingData) => {
-            let index = hasTyped.indexOf(typingData.userName);
+            let index = hasTyped.indexOf(`${typingData.userName}`);
+            console.log(`index: ${index}`);
             if(index === -1) {
-                hasTyped.push({user: typingData.userName});
+                hasTyped.push(`${typingData.userName}`);
             }
             socket.broadcast.to(clientData.roomName).emit('messageTyping', {
                 name: typingData.userName,

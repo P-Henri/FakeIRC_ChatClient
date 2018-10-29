@@ -347,18 +347,28 @@ io.on('connection', (socket) => {
                         socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
                     }
                     else {
-                        socket.broadcast.to(clientData.roomName).emit('userTyping', {
-                            name: hasTyped[0].user,
-                            msg: typingData.message,
-                            id: socket.id,
-                            erase: false
-                        });
-                        io.to(hasTyped[0].id).emit('userTyping', {
-                            name: hasTyped[0].user,
-                            msg: typingData.message,
-                            id: socket.id,
-                            erase: true
-                        });
+                        if(hasTyped.length !== 0) {
+                            socket.broadcast.to(clientData.roomName).emit('userTyping', {
+                                name: hasTyped[0].user,
+                                msg: typingData.message,
+                                id: socket.id,
+                                erase: false
+                            });
+                            io.to(hasTyped[0].id).emit('userTyping', {
+                                name: hasTyped[0].user,
+                                msg: typingData.message,
+                                id: socket.id,
+                                erase: true
+                            });
+                        }
+                        else {
+                            socket.broadcast.to(clientData.roomName).emit('userTyping', {
+                                name: typingData.userName,
+                                msg: typingData.message,
+                                id: socket.id,
+                                erase: true
+                            });
+                        }
                     }
                 }
             }

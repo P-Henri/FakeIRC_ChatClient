@@ -1,7 +1,7 @@
 # FakeIRC Chat Client
 FakeIRC is a chat client built with React for the client side and Node for the server side.
 
-This application has a lot of room for new features:
+This application has a lot of room for new features: 
 (ex: picture support, video linking, ui updates (swapping to other chat rooms easily), etc)
 
 It is also hosted on Heroku if you wish to try out the application! Note that it is meant to be used with a mobile phone.

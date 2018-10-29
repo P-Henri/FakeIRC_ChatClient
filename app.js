@@ -270,29 +270,90 @@ io.on('connection', (socket) => {
         });
         socket.on('typing', (typingData) => {
             hasTyped.forEach(user => {
-                if(user === typingData.userName) {
+                console.log(user.id);
+                console.log(user.user);
+                if(user.id === socket.id) {
                     userFound = true;
                 }
             });
             if(userFound === false) {
-                hasTyped.push(typingData.userName);
-                console.log(hasTyped);
+                hasTyped.push(typingData({id: socket.id, user: typingData.userName}));
+                console.log(hasTyped.length);
             }
             if(typingData.message.length > 0) {
-                if (typingData.length > 2) {
+                if (hasTyped.length === 2) {
                     socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
+
+                    for(let i = 0; i < hasTyped.length; ++i) {
+                        let x;
+                        if(i === 0)
+                            x = 1;
+                        else
+                            x = 0;
+
+                        io.to(hasTyped[i].id).emit('userTyping', {
+                            name: hasTyped[x].user,
+                            msg: typingData.message,
+                            erase: false
+                        });
+                    }
                 }
                 else {
-                    socket.broadcast.to(clientData.roomName).emit('userTyping', {
-                        name: typingData.userName,
-                        msg: typingData.message,
-                        id: socket.id
-                    });
+                    if(hasTyped.length > 2) {
+                        socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
+                    }
+                    else {
+                        socket.broadcast.to(clientData.roomName).emit('userTyping', {
+                            name: hasTyped[0].user,
+                            msg: typingData.message,
+                            erase: false
+                        });
+                        io.to(socket.id).emit('userTyping', {
+                            name: hasTyped[x].user,
+                            msg: typingData.message,
+                            erase: true
+                        });
+                    }
                 }
             }
             else {
-                let index = rooms.indexOf(clientData.roomName);
+                let index = rooms.indexOf(typingData.userName);
                 rooms.splice(index, 1);
+
+                if (hasTyped.length === 2) {
+                    socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
+
+                    for(let i = 0; i < hasTyped.length; ++i) {
+                        let x;
+                        if(i === 0)
+                            x = 1;
+                        else
+                            x = 0;
+
+                        io.to(hasTyped[i].id).emit('userTyping', {
+                            name: hasTyped[x].user,
+                            msg: typingData.message,
+                            erase: false
+                        });
+                    }
+                }
+                else {
+                    if(hasTyped.length > 2) {
+                        socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
+                    }
+                    else {
+                        socket.broadcast.to(clientData.roomName).emit('userTyping', {
+                            name: hasTyped[0].user,
+                            msg: typingData.message,
+                            erase: false
+                        });
+                        io.to(socket.id).emit('userTyping', {
+                            name: hasTyped[x].user,
+                            msg: typingData.message,
+                            erase: true
+                        });
+                    }
+                }
             }
             userFound = false;
         });

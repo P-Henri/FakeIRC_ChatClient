@@ -381,6 +381,12 @@ io.on('connection', (socket) => {
                     break;
                 }
             }
+            for (let i = 0; i < hasTyped.length; i++) {
+                if (hasTyped[i].user.toLowerCase() === leavingData.chatName.toLowerCase()) {
+                    hasTyped.splice(i, 1);
+                    break;
+                }
+            }
             nameString = nameString.replace(`${leavingData.chatName}, `, "");
             io.emit('currentRoomsAndUsers', {
                 rooms: roomString,
@@ -413,6 +419,11 @@ io.on('connection', (socket) => {
             for (let i = 0; i < names.length; i++) {
                 if (names[i].name.toLowerCase() === clientData.chatName.toLowerCase()) {
                     names.splice(i, 1)
+                }
+            }
+            for (let i = 0; i < hasTyped.length; i++) {
+                if (hasTyped[i].user.toLowerCase() === clientData.chatName.toLowerCase()) {
+                    hasTyped.splice(i, 1);
                 }
             }
             if (io.sockets.adapter.rooms[clientData.roomName] === undefined) {

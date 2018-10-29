@@ -268,9 +268,6 @@ io.on('connection', (socket) => {
             })
         });
         socket.on('typing', (typingData) => {
-            if(typingData.typedUsers !== undefined && typingData.typedUsers.length > 0) {
-                hasTyped = typingData.typedUsers;
-            }
             let index = hasTyped.indexOf(typingData.userName);
             if(index === -1) {
                 hasTyped.push({user: typingData.userName});

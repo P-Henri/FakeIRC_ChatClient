@@ -269,9 +269,9 @@ io.on('connection', (socket) => {
             })
         });
         socket.on('typing', (typingData) => {
+            console.log(`${hasTyped.length} people are typing -- below are the members`);
             hasTyped.forEach(user => {
-                console.log(user.id);
-                console.log(user.user);
+                console.log(`${user.id}: ${user.user}`);
                 if(user.id === socket.id) {
                     userFound = true;
                 }
@@ -321,8 +321,8 @@ io.on('connection', (socket) => {
                 }
             }
             else {
-                let index = rooms.indexOf(typingData.userName);
-                rooms.splice(index, 1);
+                let index = hasTyped.findIndex(item => item.user === typingData.userName);
+                hasTyped.splice(index, 1);
 
                 if (hasTyped.length === 2) {
                     socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');

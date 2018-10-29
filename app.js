@@ -278,7 +278,7 @@ io.on('connection', (socket) => {
             });
             console.log(userFound);
             if(userFound === false) {
-                hasTyped.push(typingData({id: socket.id, user: typingData.userName}));
+                hasTyped.push({id: socket.id, user: typingData.userName});
                 console.log(hasTyped.length);
             }
             if(typingData.message.length > 0) {

@@ -12,7 +12,6 @@ const app = express();
 //const socketIO = require('socket.io')
 
 
-
 // Enable reverse proxy support in Express. This causes the
 // the "X-Forwarded-Proto" header field to be trusted so its
 // value can be used to determine the protocol. See
@@ -206,6 +205,7 @@ let colors = [
     "#37474f",
     "#263238"
 ];
+let hasTyped = [];
 let rooms = [];
 let names = [];
 let roomString = '';
@@ -268,12 +268,19 @@ io.on('connection', (socket) => {
             })
         });
         socket.on('typing', (typingData) => {
+            if(typingData.typedUsers !== undefined && typingData.typedUsers.length > 0) {
+                hasTyped = typingData.typedUsers;
+            }
+            let index = hasTyped.indexOf(typingData.userName);
+            if(index === -1) {
+                hasTyped.push({user: typingData.userName});
+            }
             socket.broadcast.to(clientData.roomName).emit('messageTyping', {
-                    name: typingData.userName,
-                    msg: typingData.message,
-                    id: socket.id
-                }
-            )
+                name: typingData.userName,
+                msg: typingData.message,
+                typingUsers: hasTyped,
+                id: socket.id
+            });
         });
         socket.on('isLeaving', (leavingData) => {
             for (let i = 0; i < names.length; i++) {
@@ -345,7 +352,8 @@ io.on('connection', (socket) => {
         exists = false;
         roomExists = false;
     })
-});
+})
+;
 
 // home page
 app.get('/', function (req, res) {

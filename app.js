@@ -276,6 +276,7 @@ io.on('connection', (socket) => {
                     userFound = true;
                 }
             });
+            console.log(userFound);
             if(userFound === false) {
                 hasTyped.push(typingData({id: socket.id, user: typingData.userName}));
                 console.log(hasTyped.length);
@@ -294,6 +295,7 @@ io.on('connection', (socket) => {
                         io.to(hasTyped[i].id).emit('userTyping', {
                             name: hasTyped[x].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: false
                         });
                     }
@@ -306,11 +308,13 @@ io.on('connection', (socket) => {
                         socket.broadcast.to(clientData.roomName).emit('userTyping', {
                             name: hasTyped[0].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: false
                         });
                         io.to(socket.id).emit('userTyping', {
                             name: hasTyped[x].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: true
                         });
                     }
@@ -333,6 +337,7 @@ io.on('connection', (socket) => {
                         io.to(hasTyped[i].id).emit('userTyping', {
                             name: hasTyped[x].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: false
                         });
                     }
@@ -345,11 +350,13 @@ io.on('connection', (socket) => {
                         socket.broadcast.to(clientData.roomName).emit('userTyping', {
                             name: hasTyped[0].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: false
                         });
                         io.to(socket.id).emit('userTyping', {
                             name: hasTyped[x].user,
                             msg: typingData.message,
+                            id: socket.id,
                             erase: true
                         });
                     }

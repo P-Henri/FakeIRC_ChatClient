@@ -286,7 +286,7 @@ io.on('connection', (socket) => {
                     socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
 
                     for(let i = 0; i < hasTyped.length; ++i) {
-                        let x;
+                        let x = 0;
                         if(i === 0)
                             x = 1;
                         else
@@ -312,7 +312,7 @@ io.on('connection', (socket) => {
                             erase: false
                         });
                         io.to(socket.id).emit('userTyping', {
-                            name: hasTyped[x].user,
+                            name: hasTyped[0].user,
                             msg: typingData.message,
                             id: socket.id,
                             erase: true
@@ -328,7 +328,7 @@ io.on('connection', (socket) => {
                     socket.broadcast.to(clientData.roomName).emit('multipleUsersTyping');
 
                     for(let i = 0; i < hasTyped.length; ++i) {
-                        let x;
+                        let x = 0;
                         if(i === 0)
                             x = 1;
                         else
@@ -353,8 +353,8 @@ io.on('connection', (socket) => {
                             id: socket.id,
                             erase: false
                         });
-                        io.to(socket.id).emit('userTyping', {
-                            name: hasTyped[x].user,
+                        io.to(hasTyped[0].id).emit('userTyping', {
+                            name: hasTyped[0].user,
                             msg: typingData.message,
                             id: socket.id,
                             erase: true
